@@ -42,14 +42,11 @@ export default function HomePage() {
     const [gettingData, setGettingData] = useState(false)
     const [progress, setProgress] = React.useState(0);
     // const loginContext = React.useContext(LoginContext)
-
-    // const props = useSpring({ number: 86.50, from: { number: 0 } }) <animated.span>{props.number}</animated.span>
     
     async function getSentimentScore(){
-        var regex = RegExp("https://www.amazon.com/([\\w-]+/)?(dp|gp/product)/(\\w+/)?(\\w{10})");
-        const m = value.match(regex);
-        await axios.get('/score/predict',{
-                    params: {text: m[4]},
+        console.log("Calling API....")
+        await axios.get('/',{
+                    params: {SellerID: "A19R3BN6ZSO9A1"},
                     headers: {"Access-Control-Allow-Origin": "*"}
                     })
             .then(res=> {
@@ -59,6 +56,7 @@ export default function HomePage() {
                 }
                 
             )
+            console.log("API call complete....")
     }
 
     useEffect(() => {
@@ -86,7 +84,7 @@ export default function HomePage() {
         return(
             <Container maxWidth="md">
                 <div align="center">
-                    <Paper className={classes.root} align="left" elevation='4'>
+                    <Paper className={classes.root} align="left">
                             <InputBase
                                 placeholder="Enter Amazon Seller ID ... "
                                 className={classes.input}
@@ -107,7 +105,7 @@ export default function HomePage() {
         return(
             <Container maxWidth="md">
                 <div align="center">
-                    <Paper className={classes.root} align="left" elevation='4'>
+                    <Paper className={classes.root} align="left">
                             <InputBase
                                 placeholder="Enter Amazon Seller ID ... "
                                 className={classes.input}
@@ -119,7 +117,9 @@ export default function HomePage() {
                             </IconButton>
                     </Paper>
                     <Grid container className={classes.AnalysisSection}>
-                        
+                        <div>
+                            <p></p>
+                        </div>
                     </Grid>
                 </div>
             </Container>
