@@ -6,8 +6,13 @@ import axios from 'axios'
 import CircularProgress from '@material-ui/core/CircularProgress';
 // import { LoginContext } from "./LoginContext";
 
-const useStyles = makeStyles(theme => ({
-    root: {
+const useStyles = makeStyles((theme) => ({
+    root:{
+        display: 'flex',
+        height: '100vh',
+        backgroundColor: theme.palette.primary.background
+    },
+    inputBar: {
         display: 'flex',
         alignItems: 'center',
         width: '100%',
@@ -80,32 +85,32 @@ export default function HomePage() {
         getSentimentScore()
     }
 
-    if(gettingData){
+    if(!gettingData){
         return(
-            <Container maxWidth="md">
-                <div align="center">
-                    <Paper className={classes.root} align="left">
-                            <InputBase
-                                placeholder="Enter Amazon Seller ID ... "
-                                className={classes.input}
-                                inputProps={{ 'aria-label': 'naked' }}
-                                onChange={handleChange}
-                            />
-                            <IconButton className={classes.iconButton} aria-label="search" align='right' onClick={handleGoClick}>
-                                <DirectionsIcon />
-                            </IconButton>
-                    </Paper>
-                    <Grid container className={classes.AnalysisSection}>
-                        
-                    </Grid>
+                <div  className={classes.root}>
+                    <Container maxWidth="md">
+                        <Paper className={classes.inputBar} align="left">
+                                <InputBase
+                                    placeholder="Enter Amazon Seller ID ... "
+                                    className={classes.input}
+                                    inputProps={{ 'aria-label': 'naked' }}
+                                    onChange={handleChange}
+                                />
+                                <IconButton className={classes.iconButton} aria-label="search" align='right' onClick={handleGoClick}>
+                                    <DirectionsIcon />
+                                </IconButton>
+                        </Paper>
+                        <Grid container className={classes.AnalysisSection}>
+                            
+                        </Grid>
+                    </Container>
                 </div>
-            </Container>
         )       
     }else{
         return(
-            <Container maxWidth="md">
-                <div align="center">
-                    <Paper className={classes.root} align="left">
+            <div  className={classes.root}>
+                    <Container maxWidth="md">
+                        <Paper className={classes.inputBar} align="left">
                             <InputBase
                                 placeholder="Enter Amazon Seller ID ... "
                                 className={classes.input}
@@ -121,8 +126,8 @@ export default function HomePage() {
                             <p></p>
                         </div>
                     </Grid>
-                </div>
-            </Container>
+                </Container>
+            </div>
         )        
     }
 }
