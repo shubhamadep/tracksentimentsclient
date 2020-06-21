@@ -1,3 +1,9 @@
+#instruction to get rid of INVALID REQUEST TO API. 
+https://stackoverflow.com/questions/47630791/ssl-certificate-disable-verification-in-axios-and-react
+go to chrome://flags/
+Find this: Allow invalid certificates
+Enable it. 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
