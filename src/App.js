@@ -3,13 +3,13 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 
 import lightTheme from './theme/muiTheme'
-import HomePage from './Components/HomePage'
-
+import Home from './Components/Home'
+//import HomePage from './Components/HomePage'
 function App() {
   return (
     <MuiThemeProvider theme={lightTheme}>
       <Router>
-        <Route exact path = '/' component={HomePage} />
+        <Route exact path = '/' component={Home} />
       </Router>
     </MuiThemeProvider>
   );
