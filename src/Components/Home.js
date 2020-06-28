@@ -36,7 +36,8 @@ export default function Home() {
     };
 
     async function handleGoClick() {
-        products = await getProductDetails(value);      
+        products = await getProductDetails(value);     
+        alert(JSON.stringify(products, null, 4)); 
     };
     
     if(Object.keys(products).length === 0){
