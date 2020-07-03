@@ -24,6 +24,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "https://amazonsellerproductinfo.herokuapp.com/",
   "browserslist": {
     "production": [
       ">0.2%",
