@@ -1,0 +1,3 @@
+[submodule "tracksentimentsclient"]
+	path = tracksentimentsclient
+	url = https://github.com/shubhamadep/tracksentimentsclient.git
