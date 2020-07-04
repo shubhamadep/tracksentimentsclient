@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Container, Paper, InputBase, IconButton, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import DirectionsIcon from '@material-ui/icons/Directions';
-import { getProductDetails } from '../util/product';
+import { getProductDetails } from 'util/product';
 
 
 
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-        marginTop: '5%',
+        margin: '2vh',
       },
       input: {
         marginLeft: theme.spacing(1),
@@ -45,7 +45,25 @@ export default function Home() {
     
     return(
 
-        <div className={classes.root}>
+            <Paper component="form" className={classes.inputBar} align="left">
+              <InputBase
+                placeholder="Enter Amazon Seller ID"
+                className={classes.input}
+                inputProps={{'aria-label': 'seller id' }}
+                onChange={handleChange}
+              />
+              <IconButton className={classes.iconButton} aria-label="search" align='right' onClick={handleGoClick}>
+                <DirectionsIcon />
+              </IconButton>
+            </Paper>
+
+    )
+
+    }
+}
+
+
+        {/* <div className={classes.root}>
           <Container maxWidth="sm">
             <Paper component="form" className={classes.inputBar} align="left">
               <InputBase
@@ -59,9 +77,4 @@ export default function Home() {
               </IconButton>
             </Paper>
           </Container>
-        </div>
-
-    )
-
-    }
-}
+        </div> */}
