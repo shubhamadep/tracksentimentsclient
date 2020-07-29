@@ -27,17 +27,21 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
       }
 }))
-export default function Home() {
+export default function SearchBar({setASIN, setProducts}) {
     const classes = useStyles()
     const [value, setValue] = useState("");
     let products = {};
     const handleChange = (e) => {
         setValue(e.target.value);
+       
+  
     };
 
     async function handleGoClick() {
         products = await getProductDetails(value);     
-        alert(JSON.stringify(products, null, 4)); 
+        /*alert(JSON.stringify(products, null, 4));*/
+        setASIN(value);
+        setProducts(products);
     };
     
     if(Object.keys(products).length === 0){
