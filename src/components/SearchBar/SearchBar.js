@@ -1,9 +1,8 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import { Container, Paper, InputBase, IconButton, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import { getProductDetails } from 'util/product';
-import { ProductDetailsContext } from '../../contexts/ProductDetailsContext';
 
 
 
@@ -28,34 +27,21 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
       }
 }))
-export default function SearchBar() {
+export default function SearchBar({setASIN, setProducts}) {
     const classes = useStyles()
     const [value, setValue] = useState("");
-    
-    const { productDetails, dispatch } = useContext(ProductDetailsContext)
-
-    const displayTest = productDetails.length > 0 ? productDetails[0].listedProductsAndDetails : 'oops!'
-    console.log(displayTest)
-
     let products = {};
-
     const handleChange = (e) => {
         setValue(e.target.value);
        
   
     };
 
-    async function handleGoClick(e) {
-
-        e.preventDefault();
-        products = await getProductDetails(value);
-        
-        dispatch({type: 'UPDATE_PRODUCT_DETAILS', amazonScrapperAPIData: {
-          listedProductsAndDetails: products['items'],
-          statusCode: true
-        }})
-
-        alert(JSON.stringify(products, null, 4)); 
+    async function handleGoClick() {
+        products = await getProductDetails(value);     
+        /*alert(JSON.stringify(products, null, 4));*/
+        setASIN(value);
+        setProducts(products);
     };
     
     if(Object.keys(products).length === 0){
