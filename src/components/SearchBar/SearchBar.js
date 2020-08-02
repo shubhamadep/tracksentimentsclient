@@ -27,37 +27,41 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
       }
 }))
-export default function SearchBar({setGettingData, setASIN, setProducts}) {
+export default function SearchBar({setGettingData}) {
     const classes = useStyles()
     const [value, setValue] = useState("");
     let fetchingData = true;
     let products = {};
     const { productDetails, dispatch } = useContext(ProductDetailsContext)
 
-    console.log(productDetails)
-    const displayTest = productDetails.length > 0 ? productDetails[0]['listedProductsAndDetails'] : 'oops!'
-    console.log(displayTest)
-
     const handleChange = (e) => {
         setValue(e.target.value);
        
-  
     };
+
+    function sleep(milliseconds) {
+      const date = Date.now();
+      let currentDate = null;
+      do {
+        currentDate = Date.now();
+      } while (currentDate - date < milliseconds);
+    }
 
     async function handleGoClick() {
 
-        setGettingData(value);
+        setGettingData(true);
 
         products = await getProductDetails(value);     
         /*alert(JSON.stringify(products, null, 4));*/
-        setASIN(value);
-        setProducts(products);
-
         console.log(products)
 
         dispatch({type: 'UPDATE_PRODUCT_DETAILS', amazonScrapperAPIData: {
-          listedProductsAndDetails: products,
-          statusCode: true
+          listedProductsAndDetails: products['items'],
+          statusCode: true,
+          sellerName: products['sellerName'],
+          sellerRating: products['seller_rating'],
+          productCount: products['product_count'],
+          sellerReviews: products['seller_review']
         }})
 
         setGettingData(false)
@@ -67,7 +71,7 @@ export default function SearchBar({setGettingData, setASIN, setProducts}) {
 
     
     return(
-
+      
             <Paper component="form" className={classes.inputBar} align="left">
               <InputBase
                 placeholder="Enter Amazon Seller ID"
@@ -75,10 +79,11 @@ export default function SearchBar({setGettingData, setASIN, setProducts}) {
                 inputProps={{'aria-label': 'seller id' }}
                 onChange={handleChange}
               />
-              <IconButton className={classes.iconButton} aria-label="search" align='right' onClick={handleGoClick}>
+              <IconButton type="submit" className={classes.iconButton} aria-label="search" align='right' onClick={handleGoClick}>
                 <DirectionsIcon />
               </IconButton>
             </Paper>
+
 
     )
 

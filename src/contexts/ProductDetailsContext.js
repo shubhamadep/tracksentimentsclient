@@ -7,7 +7,10 @@ const ProductDetailsProvider = (props) => {
     const [productDetails, dispatch] = useReducer(productDetailsReducer, {
         listedProductsAndDetails: {},
         statusCode: false,
-        gettingData: false
+        sellerName: "",
+        sellerRating: "",
+        productCount: "",
+        sellerReviews: ""
     });
     return (
         <ProductDetailsContext.Provider value={{productDetails, dispatch}}>

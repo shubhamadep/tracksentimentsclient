@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
@@ -28,6 +28,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import ProgressBar from 'components/ProgressBar/ProgressBar.js'
 
 //context
 import { ProductDetailsContext } from '../../contexts/ProductDetailsContext';
@@ -76,8 +77,12 @@ const columns = [
 export default function Dashboard() {
   const classes = useStyles();
   const [gettingData, setGettingData] = useState(false)
-  const [asin, setASIN] = useState("");
-  const [products, setProducts] = useState(null);
+  const [tableRows, setTableRows] = useState([])
+  const [sellerName, setSellerName] = useState("")
+  const [sellerRating, setSellerRating] = useState("")
+  const [productCount, setProductCount] = useState("")
+  const [sellerReviewsCount, setSellerReviewsCount] = useState("")
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { productDetails, dispatch } = useContext(ProductDetailsContext)
@@ -96,19 +101,48 @@ export default function Dashboard() {
     setPage(0);
   };
 
+  useEffect(() => {
+    async function makeData(productDetails){
+      const productList = []
+      const fetchedData = productDetails[0]['listedProductsAndDetails']
+      await Object.keys(fetchedData).map((index) => 
+      productList.push(
+        createData( fetchedData[index]['ASIN'], 
+                    fetchedData[index]['productTitle'], 
+                    fetchedData[index]['ProductPrices'], 
+                    fetchedData[index]['ProductImageLink']
+        ))
+      )
+      setTableRows(productList)
+    }
+    if(productDetails[0]){
+      makeData(productDetails)
+      setSellerName(productDetails[0]['sellerName'])
+      setSellerRating(productDetails[0]['sellerRating'])
+      setProductCount(productDetails[0]['productCount'])
+      setSellerReviewsCount(productDetails[0]['sellerReviews'])
+    }
+  }, [productDetails])
 
-  
-    if(asin!="" && products!= null){
-      const productList = products["items"].map(product => 
-        createData(product.ASIN, product.productTitle, product.ProductPrices, product.ProductImageLink)
-        );
+  console.log(gettingData)
+    // if(asin!="" && products!= null){
+    //   const productList = productDetails[0]['listedProductsAndDetails'].map(product => 
+    //     createData(product.ASIN, product.productTitle, product.ProductPrices, product.ProductImageLink)
+    //     );
       /*alert(JSON.stringify(productList, null, 4)); */
-      if(productList){
+    if(gettingData){
+      return (
+        <div>
+          <br />
+          <ProgressBar />
+        </div>
+      )
+    }else{
       return(
       <div>
         <GridContainer>
           {/* <SearchBar asin={asin} setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/> */}
-          <SearchBar setGettingData={gettingData =>setGettingData(false)} asin={asin} setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/>
+          <SearchBar setGettingData={gettingData =>setGettingData(gettingData)}/>
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={6} md={4}>
@@ -118,12 +152,12 @@ export default function Dashboard() {
                   <Store />
                 </CardIcon>
                   <p className={classes.cardCategory}>Products</p>
-                  <h3 className={classes.cardTitle}>{products['product_count']}</h3>
+                  <h3 className={classes.cardTitle}>{productCount}</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
                 <LocalOffer />
-                Tracked from {products['sellerName']}
+                Tracked from {sellerName}
                 </div>
               </CardFooter>
             </Card>
@@ -135,12 +169,12 @@ export default function Dashboard() {
                 <StarIcon />
               </CardIcon>
               <p className={classes.cardCategory}>Overall Rating</p>
-              <h3 className={classes.cardTitle}>{products['seller_rating']}/5</h3>
+              <h3 className={classes.cardTitle}>{sellerRating}/5</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
                 <LocalOffer />
-                Tracked from {products['sellerName']}
+                Tracked from {sellerName}
               </div>
             </CardFooter>
           </Card>
@@ -152,91 +186,17 @@ export default function Dashboard() {
                 <RateReviewIcon/>
               </CardIcon>
               <p className={classes.cardCategory}>Reviews</p>
-              <h3 className={classes.cardTitle}>{products['seller_review']}</h3>
+              <h3 className={classes.cardTitle}>{sellerReviewsCount}</h3>
             </CardHeader>
              <CardFooter stats>
               <div className={classes.stats}>
                 <LocalOffer />
-                Tracked from {products['sellerName']}
+                Tracked from {sellerName}
               </div>
             </CardFooter> 
           </Card>
         </GridItem>
       </GridContainer>
-      {/*<GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="success">
-              <ChartistGraph
-                className="ct-chart"
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in today sales.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="warning">
-              <ChartistGraph
-                className="ct-chart"
-                data={emailsSubscriptionChart.data}
-                type="Bar"
-                options={emailsSubscriptionChart.options}
-                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                listener={emailsSubscriptionChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={completedTasksChart.data}
-                type="Line"
-                options={completedTasksChart.options}
-                listener={completedTasksChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-      </GridItem>
-      </GridContainer>*/}
       <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -264,11 +224,11 @@ export default function Dashboard() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {productList && productList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((productList) => {
+                {tableRows && tableRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((tableRows) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={productList.asin}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={tableRows.asin}>
                       {columns.map((column) => {
-                        const value = productList[column.id];
+                        const value = tableRows[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
                             {column.format && typeof value === 'number' ? column.format(value) : value}
@@ -284,7 +244,7 @@ export default function Dashboard() {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={productList.length}
+            count={tableRows.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
@@ -299,15 +259,5 @@ export default function Dashboard() {
 
       )
       }
-      }
-  
-      return (
-
-          <div>
-            <GridContainer>
-              <SearchBar setGettingData= {gettingData =>setGettingData(false)} setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/>
-            </GridContainer>
-          </div>
-
-      )        
+      // }        
 }
