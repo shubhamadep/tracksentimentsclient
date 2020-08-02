@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
@@ -28,6 +28,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+
+//context
+import { ProductDetailsContext } from '../../contexts/ProductDetailsContext';
 
 import { bugs, website, server } from "variables/general.js";
 
@@ -72,11 +75,12 @@ const columns = [
 
 export default function Dashboard() {
   const classes = useStyles();
+  const [gettingData, setGettingData] = useState(false)
   const [asin, setASIN] = useState("");
   const [products, setProducts] = useState(null);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  const { productDetails, dispatch } = useContext(ProductDetailsContext)
 
   function createData(asin, title, price, productImage) {
     const productImg = <Avatar variant='square' alt={asin} src={productImage} style={{width: '100px', height:'100px'}}/>;
@@ -103,7 +107,8 @@ export default function Dashboard() {
       return(
       <div>
         <GridContainer>
-          <SearchBar asin={asin} setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/>
+          {/* <SearchBar asin={asin} setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/> */}
+          <SearchBar setGettingData={gettingData =>setGettingData(false)} asin={asin} setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/>
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={6} md={4}>
@@ -291,15 +296,18 @@ export default function Dashboard() {
         </GridItem>
        </GridContainer>
       </div>
+
       )
       }
       }
   
       return (
-        <div>
-          <GridContainer>
-            <SearchBar setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/>
-          </GridContainer>
-        </div>
+
+          <div>
+            <GridContainer>
+              <SearchBar setGettingData= {gettingData =>setGettingData(false)} setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/>
+            </GridContainer>
+          </div>
+
       )        
 }
