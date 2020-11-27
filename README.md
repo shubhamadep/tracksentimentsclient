@@ -1,3 +1,7 @@
+## Track Sentiment
+
+A platform to display analytics of the products listed by a seller on Amazon.
+
 ## Home Page
 
 <img width="1919" alt="tracksentiments_homepage" src="https://user-images.githubusercontent.com/26216439/100416604-c0bcdc00-3033-11eb-9636-25934f7bbe8e.png">
