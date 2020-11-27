@@ -4,7 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import { getProductDetails } from 'util/product';
 import { ProductDetailsContext } from '../../contexts/ProductDetailsContext';
-
+import Button from '@material-ui/core/Button';
+import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer.js";
 
 const useStyles = makeStyles((theme) => ({
     root:{
@@ -12,10 +14,17 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.primary.background,
         height: '100vh'
     },
+    trymeButton:{
+      display: 'flex',
+      alignItems: 'center',
+      width: '15%',
+      margin: '2vh',
+    },
+
     inputBar: {
         display: 'flex',
         alignItems: 'center',
-        width: '100%',
+        width: '85%',
         margin: '2vh',
       },
       input: {
@@ -27,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
       }
 }))
-export default function SearchBar({setGettingData}) {
+export default function SearchBar({setGettingData, setSellerID, sellerID}) {
     const classes = useStyles()
     const [value, setValue] = useState("");
     let fetchingData = true;
@@ -36,7 +45,12 @@ export default function SearchBar({setGettingData}) {
 
     const handleChange = (e) => {
         setValue(e.target.value);
-       
+        
+    };
+
+    const handleTryMe = () => {
+      setSellerID('A20J3ITGSOMSJG');
+      
     };
 
     function sleep(milliseconds) {
@@ -50,7 +64,7 @@ export default function SearchBar({setGettingData}) {
     async function handleGoClick() {
 
         setGettingData(true);
-
+        setSellerID(value);
         products = await getProductDetails(value);     
         /*alert(JSON.stringify(products, null, 4));*/
         console.log(products)
@@ -64,25 +78,31 @@ export default function SearchBar({setGettingData}) {
           sellerReviews: products['seller_review']
         }})
 
-        setGettingData(false)
+        setGettingData(false);
     };
     
     if(Object.keys(products).length === 0){
 
     
     return(
-      
-            <Paper component="form" className={classes.inputBar} align="left">
+            <div style={{ display: "flex" , width: '100%'}}>
+            <Paper component="form" className={classes.inputBar} >
               <InputBase
                 placeholder="Enter Amazon Seller ID"
                 className={classes.input}
                 inputProps={{'aria-label': 'seller id' }}
                 onChange={handleChange}
+                defaultvalue={sellerID}
               />
               <IconButton type="submit" className={classes.iconButton} aria-label="search" align='right' onClick={handleGoClick}>
                 <DirectionsIcon />
               </IconButton>
             </Paper>
+            <Button variant="contained" color="primary" className={classes.trymeButton} onClick= {handleTryMe} >
+            Try ME!
+            </Button>
+            </div>
+
 
 
     )
