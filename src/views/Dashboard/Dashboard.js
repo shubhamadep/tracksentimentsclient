@@ -82,7 +82,7 @@ export default function Dashboard() {
   const [sellerRating, setSellerRating] = useState("")
   const [productCount, setProductCount] = useState("")
   const [sellerReviewsCount, setSellerReviewsCount] = useState("")
-
+  const [sellerID, setSellerID] = useState("")
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { productDetails, dispatch } = useContext(ProductDetailsContext)
@@ -142,7 +142,7 @@ export default function Dashboard() {
       <div>
         <GridContainer>
           {/* <SearchBar asin={asin} setASIN={asin =>setASIN(asin)} setProducts={products =>setProducts(products)}/> */}
-          <SearchBar setGettingData={gettingData =>setGettingData(gettingData)}/>
+          <SearchBar setGettingData={gettingData =>setGettingData(gettingData)} setSellerID={sellerID =>setSellerID(sellerID)} sellerID = {sellerID}/>
         </GridContainer>
         <GridContainer>
           <GridItem xs={12} sm={6} md={4}>
