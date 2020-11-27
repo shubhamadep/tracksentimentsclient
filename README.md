@@ -1,6 +1,6 @@
 ## Track Sentiment
 
-A platform to display analytics of the products listed by a seller on Amazon.
+A platform to display product analytics listed by a seller on Amazon. 
 
 ## Home Page
 
