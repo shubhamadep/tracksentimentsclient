@@ -82,7 +82,7 @@ export default function Dashboard() {
   const [sellerRating, setSellerRating] = useState("")
   const [productCount, setProductCount] = useState("")
   const [sellerReviewsCount, setSellerReviewsCount] = useState("")
-  const [sellerID, setSellerID] = useState("")
+  const [sellerID, setSellerID] = useState("A20J3ITGSOMSJG")
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { productDetails, dispatch } = useContext(ProductDetailsContext)
